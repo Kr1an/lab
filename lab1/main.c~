@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(/*@unused@ */ int argc,/*@unused@ */ char *argv[])
+{
+	int n = 0, i = 0, k = 0;
+	float f = 0;
+	double p = 1;
+	double sum = 0,pDouble;
+	float ep=0.0000001;
+	printf("Enter  n(Natural):");
+	if (scanf("%d", &n) == 0 || n <= 0) {
+		printf("input error..\n");
+		return -1;
+	}
+	printf("Enter f(Real):");
+	if (scanf("%f", &f) == 0 || (f<ep && f>ep*(-1))) {
+		printf("input error..\n");
+		return -1;
+	}
+	pDouble=(float)p;
+
+	for (i = 1; i <= n; i++) {
+		sum = 0;
+		for (k = 0; k <= i; k++) {
+			sum += (f + k);
+		}
+		pDouble *= (1 / sum);
+		p=(float)pDouble;
+	}
+	printf("%.100f\n", p);
+	return 0;
+}

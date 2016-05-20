@@ -1,0 +1,295 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct request  {
+	int cost;
+	int engine;
+	int year;
+	int distance;
+	unsigned costCond:1;
+	unsigned engineCond:1;
+	unsigned yearCond:1;
+	unsigned distanceCond:1;
+};
+static int EXIT_TRUE = 0;
+static int EXIT_FALSE = -1;
+static int _NULL = 0;
+static int RECENT_YEAR=0;
+static const int FIRST_YEAR=1768;
+static const int CLS_NUM=6;
+static const int TRUE=1;
+static int DIG_MAX=2000000000; 
+static const int VAR_DEFAULT=-1;
+static const int FALSE = 0;
+
+static float helpFunc(struct request* obj);
+static void clrscr(void);
+static void setEngine(struct request *obj);
+static void setYear(struct request *obj);
+static void setCost(struct request *obj);
+static void setDistance(struct request *obj);
+static void costCalculation(struct request *obj);
+static void info();
+static void requestNew(/*@out@*/struct request *obj);
+static int checkCond(struct request obj);
+static void printMenu(struct request obj);
+int main(/*@unused@*/int argc,/*@unused@*/ char *argv[]) 
+{
+	struct request obj;
+	printf("Enter current year ..");
+	if(scanf("%d",&RECENT_YEAR)==_NULL || RECENT_YEAR < FIRST_YEAR || RECENT_YEAR > DIG_MAX)
+	{
+		printf("year error \n");
+		return EXIT_FALSE;
+	}
+	(void)getchar();
+	clrscr();
+	requestNew(&obj);
+	
+	do
+		 {
+		printMenu(obj);
+		switch (getchar())
+			 {
+		case '1':
+			setCost(&obj);
+			break;
+		case '2':
+			setYear(&obj);
+			break;
+		case '3':
+			setEngine(&obj);
+			break;
+		case '4':
+			setDistance(&obj);
+			break;
+		case '5':
+			costCalculation(&obj);
+			break;
+		case '6':
+			info();
+			break;
+		case '7':
+			return EXIT_TRUE;
+		default:
+			break;
+			}
+		(void)getchar();
+	} while (TRUE);
+	return EXIT_TRUE;
+}
+
+/*================FUNCTIONS======================================================*/ 
+static void info() 
+{
+	(void)getchar();
+	clrscr();
+	printf
+	    ("Info : \nprogram: Gross Transport(%d year) \nversion: 1.0 \n \tAutor: Kr1an \n \tMail: Kr1an@hotmail.com \n",RECENT_YEAR);
+	while (TRUE)
+		 {
+		printf
+		    ("enter (1+Enter)-exit to terminal, (2+Enter)-exit to menu..");
+		switch (getchar())
+			 {
+		case '1':
+			exit(EXIT_SUCCESS);
+		case '2':
+			return;
+		default:
+			printf("Num Error; Try more..\n");
+			break;
+			}
+		(void)getchar();
+		}
+}
+
+static void requestNew(struct request *obj)
+{
+	obj->cost = _NULL;
+	obj->engine = _NULL;
+	obj->year = _NULL;
+	obj->costCond = _NULL;
+	obj->engineCond = _NULL;
+	obj->yearCond = _NULL;
+	obj->distanceCond = _NULL;
+	obj->distance = _NULL;
+}
+void clrscr(void) 
+{
+	int i;
+	for (i = _NULL; i < CLS_NUM; i++)
+		printf("\n");
+}
+
+static void setCost(struct request *obj) 
+{
+	const int sizeOfTemp = 20;
+	char temp[sizeOfTemp];
+	int cost = _NULL;
+	(void)getchar();
+	clrscr();
+	while (TRUE) {
+		printf("Set cost of the car in Eu (-1+Enter)-exit: ");
+		(void)scanf("%s", temp);
+		cost = atoi(temp);
+		if (cost == VAR_DEFAULT)
+			 {
+			return;
+		} else if (cost > _NULL && cost < DIG_MAX)
+			 {
+			obj->cost = cost;
+			obj->costCond = TRUE;
+			return;
+		} else
+			printf("Cost Error; Try one more\n");
+	}
+}
+
+static void setEngine(struct request *obj) 
+{
+	const int sizeOfTemp = 20;
+	char temp[sizeOfTemp];
+	int engine = _NULL;
+	clrscr();
+	while (TRUE) {
+		printf("Set engine volue of the car (-1+Enter)-exit: ");
+		(void)scanf("%s", temp);
+		engine = atoi(temp);
+		if (engine == VAR_DEFAULT)
+			 {
+			return;
+		} else if (engine > _NULL && engine <= DIG_MAX)
+			 {
+			obj->engine = engine;
+			obj->engineCond = TRUE;
+			return;
+		} else
+			printf("Engine volue Error; Try one more\n");
+	}
+}
+
+static void setYear(struct request *obj) 
+{
+	const int sizeOfTemp = 20;
+	char temp[sizeOfTemp];
+	int year = _NULL;
+	clrscr();
+	while (TRUE) {
+		printf("Set year of the car (-1+Enter)-exit: ");
+		(void)scanf("%s", temp);
+		year = atoi(temp);
+		if (year == VAR_DEFAULT)
+			 {
+			return;
+		} else if (year >= FIRST_YEAR && year <= RECENT_YEAR)
+			 {
+			obj->year = year;
+			obj->yearCond = TRUE;
+			return;
+		} else
+			printf
+			    ("Year Error; No Car in this year;Try one more\n");
+	}
+}
+
+static int checkCond(struct request obj) 
+{
+	if (obj.yearCond != FALSE && obj.engineCond != FALSE && obj.costCond != FALSE
+	     && obj.distanceCond != FALSE)
+		return EXIT_FALSE;
+	
+	else
+		return EXIT_TRUE;
+}
+
+static void setDistance(struct request *obj) 
+{
+	const int sizeOfTemp = 20;
+	char temp[sizeOfTemp];
+	int distance = _NULL;
+	clrscr();
+	while (TRUE) {
+		printf("Set Distance of your request (-1+Enter)-exit: ");
+		(void)scanf("%s", temp);
+		distance = atoi(temp);
+		if (distance == VAR_DEFAULT)
+			 {
+			return;
+		} else if (distance > _NULL && distance <= DIG_MAX	)
+			 {
+			obj->distance = distance;
+			obj->distanceCond = TRUE;
+			return;
+		} else
+			printf("Distance Error; Try one more\n");
+	}
+}
+
+/*literal is legal dye to requirenment of ex*/
+static float helpFunc(struct request *obj)
+{
+	float cost=0;
+	if ((RECENT_YEAR - obj->year) <= 3)
+		cost = 0.6 * obj->engine;
+	if ((RECENT_YEAR - obj->year) > 3 && (RECENT_YEAR - obj->year) <= 10)
+		cost =(obj->engine <2500) ? (0.35 * obj->engine) : (0.6 * obj->engine);
+	if ((RECENT_YEAR - obj->year) > 10 && (RECENT_YEAR - obj->year) < 14)
+		cost = 0.6 * obj->engine;
+	if ((RECENT_YEAR - obj->year) >= 14)
+		cost = 2 * obj->year;
+	return cost;
+}
+
+
+static void costCalculation(struct request *obj) 
+{
+	float cost = _NULL;
+	clrscr();
+	if (checkCond(*obj) == _NULL)
+		return;
+	cost=helpFunc(obj);
+	printf("Calculation option: \n");
+	printf("Car cost: %d\n", obj->cost);
+	printf("\tDistance cost: %.2f\n", (float)(0.5 * obj->distance));
+	printf("\tBoarder cost: %.2f\n", cost);
+	printf("\tResult: %.2f \n", cost + obj->cost + (0.5 * obj->distance));
+	(void)getchar();
+	while (TRUE)
+		 {
+		printf
+		    ("enter (1+Enter)-exit to terminal, (2+Enter)-exit to menu..");
+		switch (getchar())
+			 {
+		case '1':
+			exit(EXIT_SUCCESS);
+		case '2':
+			return;
+		default:
+			printf("Num Error; Try more..\n");
+			break;
+			}
+		(void)getchar();
+		}
+}
+
+static void printMenu(struct request obj) 
+{
+	clrscr();
+	printf("\t\t\tGross Transport(%d)\n",RECENT_YEAR);
+	printf("Information about your request:\n");
+	printf("  1: Cost in Eu($---): %d\n",
+		(obj.costCond == 0) ? (-1) : (obj.cost));
+	printf("  2: Year of car(----): %d\n",
+		(obj.yearCond == 0) ? (-1) : (obj.year));
+	printf("  3: Engine Value(cm^3): %d\n",
+		(obj.engineCond == 0) ? (-1) : (obj.engine));
+	printf("  4: Done distance(km): %d\n",
+		(obj.distance == 0) ? (-1) : (obj.distance));
+	printf("Show compleat information about your request: \n");
+	printf("  5: Cost of request. %s\n",
+		(checkCond(obj) == 1) ? ("is up") : ("is't up"));
+	printf("  6: Information about programm state and auter.\n");
+	printf("  7: Exit the program.\n");
+	printf("\t\tPress one of 1..7+Enter button and...\n");
+}
