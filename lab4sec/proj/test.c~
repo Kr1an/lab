@@ -1,0 +1,37 @@
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+const int _FILE_STR_LEN = 80;
+const int _EXIT_SUCCESS = 0;
+char ParseSymbal[] = { ' ', ',', '.', ';', ':', '?', '!', '\'',
+	'"', '|', '/', '\\', '~', '_', '^',
+	'(', ')', '{', '}', '[', ']', '<', '\t',
+	'>', '#', '%', '&', '-', '=', '+', '*'
+};
+
+static void getText();
+
+int main(void)
+{
+	getText();
+
+	return _EXIT_SUCCESS;
+}
+static void getText()
+{
+	char * temp = (char*)malloc(sizeof(char*) * _FILE_STR_LEN );
+	FILE* file = fopen("text.txt","w");
+	printf("\t\tEnter your text; when ready write \"-1\" end press enter\n\n");
+	fgets( temp, _FILE_STR_LEN, stdin );
+	while( strcmp( temp, "-1\n") != 0 )
+	{
+		fprintf( file, "%s", temp );
+		fprintf(file, "\n%s", (temp[strlen(temp+1)] == '\n') ? ("\n"): (""));
+		strcpy( temp, "");
+		fgets( temp, _FILE_STR_LEN , stdin );
+	}
+	fclose(file);
+	free(temp);
+	return;
+}

@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+static int fact(int x)
+{
+	if(x==0) return 1;
+	else
+		return x*fact(x-1);
+}
+int main(/*@unused@*/int args,/*@unused@*/char* argv[])
+{
+	float temp;
+	float x=45;
+	float _sin=0;
+	float _sinT=0;
+	float e;
+	int i;
+	printf("Example of Taler Function:sin(x)=(-1)^(n-1)*x^(2n-1)/(f(2n-1))+...\n");
+	printf("Enter an angle(0<=x<360)... ");	
+	if(scanf("%f",&x)==0 || x<0 || x>360)
+	{
+		printf("Input Error...\n");
+		return -1;
+	}
+	printf("Enter epsilon(e>=0.000001): ");
+	if(scanf("%f",&e)==0 || e<0.0000009)
+	{
+		printf("Input Error...\n");
+		return -1;
+	}
+	_sin=(float)sin(x);
+	x=(float)asin(_sin);
+	for(i=1;fabs(_sin-_sinT)>=e;i++)
+	{
+		temp=_sinT+(pow(-1,i-1))*((pow(x,2*i-1))/(fact(2*i-1)));
+		_sinT=temp;
+		printf("sin(x): %.7f\tTalerFunct: %.7f\n",_sin,_sinT);
+	}
+	return 0;
+}
