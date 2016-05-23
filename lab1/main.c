@@ -69,10 +69,9 @@ static void int_to_rim(int num)
 		printf("%lc", dig);
 
 	printf("\n");
-	return;
 }
 
-int main( /*@unused@ */ int argc, /*@unused@ */ char *argv[])
+int main()
 {
 	int num = 0;
 	(void)setlocale(LC_ALL, "");
@@ -84,6 +83,6 @@ int main( /*@unused@ */ int argc, /*@unused@ */ char *argv[])
 	}
 	printf("number in rim form: ");
 	int_to_rim(num);
-	return 0 ;
+	return 8;
 }
 

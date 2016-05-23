@@ -13,7 +13,7 @@ static const int VAR_DEFAULT = -1;
 static void clrscr(void);
 static void set_sightLen(Tetrahedron *obj);
 static void info();
-static void requestNew( /*@out@ */Tetrahedron *obj);
+static void requestNew(Tetrahedron *obj);
 static void printMenu(Tetrahedron obj);
 
 static int count_sumedUp(Tetrahedron	obj);
@@ -54,11 +54,11 @@ int main( /*@unused@ */ int argc, /*@unused@ */ char *argv[])
 
 static double count_radInSphere(Tetrahedron	obj)
 {
-	return count_hight(obj) / 3.0;
+	return count_hight(obj) / 3;
 }
 static double count_hight(Tetrahedron	obj)
 {
-	return sqrt(2.0/3) * (double)obj.sightLen;
+	return sqrt(2.0/3) * obj.sightLen;
 }
 static double count_volume(Tetrahedron	obj)
 {
@@ -77,7 +77,7 @@ static void info()
 {
 	(void)getchar();
 	clrscr();
-	printf("Info : \nprogram: Tetrahedron \nversion: 1.0 \n \tAutor: Kruan \n \tMail: Kruan@gmail.com");
+	printf("Info : \nprogram: Tetrahedron \nversion: 1.0 \n \tAutor: Kirill \n \tMail: Kirjushadotcom@gmail.com");
 }
 
 static void requestNew(Tetrahedron *obj)
@@ -130,6 +130,6 @@ static void printMenu(Tetrahedron obj)
 	printf("  6: Radiuse of in-sphere(mm): %lf\n", (obj.sightLenState == 0) ? (-1) : (count_radInSphere(obj)));
 	printf("  7: Info.\n");
 	printf("  8: Exit.\n");
-	printf("\t\tPress one of 1..8+Enter button and...\n");
+	printf("\t\tPress one of 1,7,8+Enter button and...\n");
 
 }

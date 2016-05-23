@@ -28,6 +28,7 @@ int main(/*@unused@*/int args, /*@unused@*/ char** argv)
 {
 	writeText();
 	findAnswer();
+	printf("\n");
 	return _EXIT_SUCCESS;
 }
 static void inputError()
@@ -42,8 +43,8 @@ static void findAnswer()
 	char ** text;
 	int st = 0;
 	text = readText();
-	for( i = _NULL; strcmp(text[i],"") != _NULL; i++)
-		for( q = _NULL; q < (int)strlen(text[i]); q++)
+	for( i = 0; strcmp(text[i],"") != 0; i++)
+		for( q = 0; q < (int)strlen(text[i]); q++)
 			if( text[i][q] >= 'a' && text[i][q] <= 'z' )
 				text[i][q] += 'A' - 'a';
 	
@@ -63,7 +64,7 @@ static void findAnswer()
 static int fileRows()
 {
 	int i = _NULL;
-	char *temp = (char*)malloc( sizeof(char) * _FILE_STR_LEN * _TWO );
+	char *temp = (char*)malloc( sizeof(char) * _FILE_STR_LEN * 2 );
 	FILE* file =fopen( TEXT_FILE_NAME, "r" );
 	if( file == NULL || temp == nil )
 		inputError();
