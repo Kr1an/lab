@@ -1,0 +1,339 @@
+program lab5;
+{$APPTYPE CONSOLE}
+uses
+  SysUtils;
+
+Type
+   trace= record
+
+   end;
+   node=^_node;
+   TQueue=array of node;
+   _node=record
+    l , r , p: node ;
+    h:char;
+    x:integer;
+   End ;
+//==============================================================
+procedure cont(T:node;var i:integer);
+begin
+  if t<>nil then
+  begin
+    i:=i+1;
+    cont(T^.l,i);
+    cont(T^.r,i);
+  end;
+end;
+//=================================================================
+function find_root(var t:node):node;
+begin
+  while t^.p<>nil do
+  begin
+    t:=t^.p;
+  end;
+  find_root:=t;
+end;
+//==============================================================
+function count(t:node):integer;
+var
+  i:integer;
+begin
+  i:=0;
+  cont(find_root(t),i);
+  count:=i;
+end;
+//==============================================================
+procedure null(var T:node);
+begin
+  T:=nil;
+end;
+//==============================================================
+procedure show (var tree:node);
+begin
+  if tree<>nil then
+  begin
+    show(tree^.l);
+    Write(tree^.x, ' ');
+    show(tree^.r);
+  end;
+end;
+//==============================================================
+function rotateLeft(var t,root:node):node;
+var
+  z,m,p:node;
+begin
+  z:=t^.p;
+  m:=t^.l;
+  p:=z^.p;
+  t^.p:=z^.p;
+  if p<>nil then
+  begin
+    if p^.l=z then p^.l:=t;
+    if p^.r=z then p^.r:=t;
+  end;
+  t^.l:=z;
+  z^.r:=m;
+  if m<>nil then
+    m^.p:=z;
+  z^.p:=t;
+  if p=nil then
+  begin
+    root:=t;
+  end;
+end;
+//==============================================================
+procedure rotateRigth(var t,root:node);
+var
+  z,m,p:node;
+begin
+  z:=t^.p;
+  m:=t^.r;
+  p:=z^.p;
+  t^.p:=z^.p;
+  if p<>nil then
+  begin
+    if p^.l=z then p^.l:=t;
+    if p^.r=z then p^.r:=t;
+  end;
+  z^.l:=m;
+  if m<>nil then
+    m^.p:=z;
+  t^.r:=z;
+  z^.p:=t;
+  if p=nil then
+  begin
+    root:=t;
+  end;
+end;
+
+//==============================================================
+procedure rotation(var t,root:node);
+begin
+  randomize;
+  if random(count(t) div 2)<>0 then exit;
+  while t^.p<>nil do
+  begin
+    if t^.p^.r=t then rotateLeft(t,root)
+    else if t^.p^.l=t then rotateRigth(t,root);
+  end;
+end;
+//==============================================================
+function find(T:node;k:integer):node;
+begin
+  if (T=nil) or (T^.x=k) then begin find:=T; exit; end;
+  if (k<T^.x) and (T^.l<>nil) then begin find:=find(T^.l,k); exit; end;
+  if (k>T^.x) and (T^.r<>nil) then begin find:=find(T^.r,k); exit; end;
+  find:=nil;
+end;
+//==============================================================
+
+procedure add_node(k:integer;var MyTree,root:node);overload;
+var
+  temp,tempR:node;
+begin
+  if MyTree=nil then
+  begin
+    new(MyTree);
+    MyTree^.x:=k;
+    null(MyTree^.p);
+    null(MyTree^.l);
+    null(MyTree^.r);
+    exit;
+  end;
+  if k<MyTree^.x then
+  begin
+    if MyTree^.l<>nil then add_node(k,MyTree^.l,root)
+    else
+    begin
+      new(MyTree^.l);
+      MyTree^.l^.x:=k;
+      MyTree^.l^.p:=MyTree;
+      null(MyTree^.l^.l);
+      null(MyTree^.l^.r);
+      temp:=find(MyTree,k);
+      rotation(temp,root);
+    end;
+  end else
+  begin
+    if MyTree^.r<>nil then add_node(k,MyTree^.r,root)
+    else
+    begin
+      new(MyTree^.r);
+      MyTree^.r^.x:=k;
+      MyTree^.r^.p:=MyTree;
+      null(MyTree^.r^.l);
+      null(MyTree^.r^.r);
+      temp:=find(MyTree,k);
+      rotation(temp,root);
+    end;
+  end;
+end;
+
+//==============================================================
+procedure add_node(mass:array of integer;var T:node);overload;
+var
+  i:integer;
+begin
+  for i:=0 to length(mass)-1 do
+    add_node(mass[i],T,t);
+end;
+//==============================================================
+function min(T:node):node;
+begin
+  if T=nil then begin min:=T; exit; end;
+  if T^.l<>nil then
+    min:=min(T^.l)
+  else min:=T;
+end;
+//==============================================================
+procedure showNum(T:node);
+begin
+  writeln(T^.x);
+end;
+//==============================================================
+
+function max(T:node):node;
+begin
+  if T=nil then begin max:=T; exit; end;
+  if T^.r<>nil then
+    max:=max(T^.r)
+  else max:=T;
+end;
+//==============================================================
+procedure del_node(var T,_t:node);
+var
+    n,y,z,r,o:node;
+begin
+  if (T=nil) then exit;
+  if (T^.l=nil) and (T^.r=nil) then
+  begin
+    if (T^.p<>nil) and (T^.p^.l=T) then null(T^.p^.l);
+    if (T^.p<>nil) and (T^.p^.r=T) then null(T^.p^.r);
+    if (T=_t) then null(_t);
+    null(T);
+
+    writeln('deleted with 0-0');
+    exit;
+  end;
+  if (T^.l<>nil) and (T^.r=nil) then
+  begin
+    if (T^.p<>nil) and (T^.p^.l=T) then T^.p^.l:=T^.l;
+    if (T^.p<>nil) and (T^.p^.r=T) then T^.p^.r:=T^.l;
+    if (t=_t) then _t:=t^.l;
+    null(T^.p);
+    null(T^.l);
+    null(T^.r);
+    null(T);
+    writeln('deleted with 1-0');
+    exit;
+  end;
+  if (T^.r<>nil) and (T^.l=nil) then
+  begin
+    if (T^.p<>nil) and (T^.p^.l=T) then T^.p^.l:=T^.r;
+    if (T^.p<>nil) and (T^.p^.r=T) then T^.p^.r:=T^.r;
+    if (t=_t) then _t:=t^.r;
+    null(T^.p);
+    null(T^.l);
+    null(T^.r);
+    null(T);
+    writeln('deleted with 0-1');
+    exit;
+  end;
+  if (T^.l<>nil) and (T^.r<>nil) then
+  begin
+    n:=t^.p;
+    y:=t^.l;
+    z:=t^.r;
+    r:=min(z);
+    o:=r^.r;
+    if z<>r then
+    begin
+      if o<>nil then
+      begin
+        o^.p:=r^.p;
+        r^.p^.l:=o;
+      end else
+        r^.p^.l:=o;
+    end else
+    begin
+
+    end;
+
+    if n<>nil then
+    begin
+      r^.p:=n;
+      if n^.l=t then n^.l:=r;
+      if n^.r=t then n^.r:=r;
+
+    end else
+    begin
+      r^.p:=n;
+    end;
+    r^.l:=y;
+    y^.p:=r;
+    if z<>r then
+    begin
+      r^.r:=z;
+      z^.p:=r;
+    end;
+    if t^.p=nil then _t:=r;
+    writeln('deleted with 1-1');
+    exit;
+  end;
+end;
+//=============================================================
+
+procedure hor_show(T:node);
+var
+  i,j:integer;
+  queue:TQueue;
+begin
+  i:=0;
+  j:=1;
+  cont(T,i);
+  if i=0 then exit;
+  setlength(queue,i);
+  queue[0]:=T;
+  for i:=0 to length(queue)-1 do
+  begin
+    if queue[i]^.l<>nil then begin queue[j]:=queue[i]^.l; j:=j+1; end;
+    if queue[i]^.r<>nil then begin queue[j]:=queue[i]^.r; j:=j+1; end;
+  end;
+  for i:=0 to length(queue)-1 do
+    write(queue[i]^.x,' ');
+end;
+//==============================================================
+
+var
+  T:node;
+  temp:node;
+  mass:array of integer;
+  begin
+    null(T);
+    setlength(mass,11);
+    mass[0]:=101;
+    mass[1]:=9;
+    mass[2]:=27;
+    mass[3]:=34;
+    mass[4]:=6;
+    mass[5]:=66;
+    mass[6]:=4;
+    mass[7]:=19;
+    mass[8]:=15;
+    mass[9]:=14;
+    mass[10]:=160;
+    {mass[5]:=13;
+    mass[6]:=11;
+    mass[7]:=12;}
+    {mass[5]:=13;}
+
+    {temp:=find(T,2);
+    writeln(count(temp));
+    show(t);
+    writeln;}
+    add_node(mass,t);
+    show(t);
+    Readln;
+
+   { TODO -oUser -cConsole Main : Insert code here }
+end.
