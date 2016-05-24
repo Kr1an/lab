@@ -1,0 +1,5 @@
+C:\Users\Kr1an_000\Documents\Workspace\Csharp\OpenGLSteps\WindowsFormsApplication2\ClassLibrary1\bin\Debug\ClassLibrary1.dll
+C:\Users\Kr1an_000\Documents\Workspace\Csharp\OpenGLSteps\WindowsFormsApplication2\ClassLibrary1\bin\Debug\ClassLibrary1.pdb
+C:\Users\Kr1an_000\Documents\Workspace\Csharp\OpenGLSteps\WindowsFormsApplication2\ClassLibrary1\obj\Debug\testdll.csprojResolveAssemblyReference.cache
+C:\Users\Kr1an_000\Documents\Workspace\Csharp\OpenGLSteps\WindowsFormsApplication2\ClassLibrary1\obj\Debug\ClassLibrary1.dll
+C:\Users\Kr1an_000\Documents\Workspace\Csharp\OpenGLSteps\WindowsFormsApplication2\ClassLibrary1\obj\Debug\ClassLibrary1.pdb

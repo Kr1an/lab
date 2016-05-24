@@ -1,0 +1,6 @@
+C:\Users\Kr1an_000\Documents\Workspace\Csharp\OpenGLSteps\classIerarchi\classIerarchi\bin\Debug\classIerarchi.exe.config
+C:\Users\Kr1an_000\Documents\Workspace\Csharp\OpenGLSteps\classIerarchi\classIerarchi\bin\Debug\classIerarchi.exe
+C:\Users\Kr1an_000\Documents\Workspace\Csharp\OpenGLSteps\classIerarchi\classIerarchi\bin\Debug\classIerarchi.pdb
+C:\Users\Kr1an_000\Documents\Workspace\Csharp\OpenGLSteps\classIerarchi\classIerarchi\obj\Debug\classIerarchi.csprojResolveAssemblyReference.cache
+C:\Users\Kr1an_000\Documents\Workspace\Csharp\OpenGLSteps\classIerarchi\classIerarchi\obj\Debug\classIerarchi.exe
+C:\Users\Kr1an_000\Documents\Workspace\Csharp\OpenGLSteps\classIerarchi\classIerarchi\obj\Debug\classIerarchi.pdb
