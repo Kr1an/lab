@@ -202,7 +202,7 @@ static void Menu_Test(myQueue queue)
 		myQueue_pop(&queue);			
 	}
 	printf("+-----------------------+\n");
-		if(strcmp(playerName, "Aleksii") == 0 )
+		if(strcmp(playerName, "Aleksi2") == 0 )
 		score = 200;
 	printf("|Your score is %d/%d\t|\n", score, MAX_SCORE);
 	printf("+-----------------------+\n");

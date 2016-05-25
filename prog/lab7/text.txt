@@ -1,0 +1,72 @@
+#
++
+Question 1: What is't formal for C mass creating?
+a)int * mass = (int*)malloc( sizeof(int ) * 5);
+b)int [5] mass;
+c)int mass [6]
+b)int [5] mass;
+-
++
+Question 2: What is the meaning for next syntaxus structure?"typedef int*lnt"
+a)int multiply to lnt and output
+b)use lnt as int* 
+c)use int as *lnt
+b)use lnt as int*
+-
++
+Question 3: What is the output?"printf("%.3lfloat%double", 4.555,(int)4.99);
+a)dont known
+b)4.555loat4ouble
+c)4.555loat5ouble
+b)4.555loat4ouble
+-
++
+Question 4: What is standert librarty for C?
+a)windows
+b)ncurses
+c)stdlib
+c)stdlib
+-
++
+Question 5: Where is preprossesing?
+a)*include
+b)#ifendef
+c)&preprossesing
+b)#ifendef
+-
++
+Question 6: What is returned type of next func? static const char *(*f)(char*,int,int);  
+a)static char*
+b)const char*
+c)const char**
+b)const char*
+-
++
+Question 7: What this script is doing?#define vvv(a,b) (a > b) ? a : b
+a)return either a or b
+b)return either a
+c)return neither 1 nor 0
+a)return either a or b
+-
++
+Question 8: What is the size of next struct {int y;char mass[6];}
+a)8 bite
+b)10 bite
+c)12 bite
+c)12 bite
+-
++
+Question 9: What is the head files?
+a)main file with all code
+b)file with discriptions
+c)file to comments
+b)file with discriptions
+-
++
+Question 10: How many mistakes? do printf("yes") while(true) 
+a)to many. Cant COUNT!
+b)3
+c)4
+b)3
+-
+~
