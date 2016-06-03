@@ -9,11 +9,11 @@ Vovanov
 -
 
 +
-Anton
-Krinitsyn
+Roma
+Konuv
 553502
-70
-0
+43
+1
 1
 -
 
@@ -22,15 +22,6 @@ Vladislav
 Evtuchov
 553502
 99
-0
-1
--
-
-+
-Roma
-Konuv
-553502
-43
 1
 1
 -

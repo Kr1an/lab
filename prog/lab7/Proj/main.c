@@ -46,7 +46,9 @@ static void Menu_CleanDB();
 
 int main(void)
 {
+	
 	mass = readQuestions();
+	
 	mass_len = QuestionCount();
 	while(1)
 	{
@@ -107,13 +109,21 @@ static void Menu_Find()
 	{
 		printf("Enter first name: ");
 		if( scanf("%s", tempQuest.name_First) == 0)
-			exit_Error();
+		{
+			printf("\n\t<IException>\n");
+			inputClose();
+			break;
+		}
 		else
 			inputClose();
 
 		printf("Enter second name: ");
 		if( scanf("%s", tempQuest.name_Second) == 0)
-			exit_Error();
+		{
+			printf("\n\t<IException>\n");
+			inputClose();
+			break;
+		}
 		else
 			inputClose();
 		printf("\nfirst, sec names: %s, %s\nSURE?(y/n): ", tempQuest.name_First, tempQuest.name_Second);
@@ -122,7 +132,10 @@ static void Menu_Find()
 			ch = getchar();
 		}
 		if( ch == 'n' )
-			continue;
+		{
+			printf("\n\t<Record deleted>\n");
+			break;
+		}
 		for(i = 0; i < mass_len; i++)
 			if( strcmp(mass[i].name_First, tempQuest.name_First) == 0 && strcmp(mass[i].name_Second, tempQuest.name_Second) == 0)
 			{
@@ -141,6 +154,10 @@ static void Menu_Find()
 			printf("<nothing found>\n");
 		break;
 	}
+	free(tempQuest.name_First);
+	free(tempQuest.name_Second);
+	free(tempQuest.avr_mark);
+	free(tempQuest.group);
 	inputClose();
 	getchar();
 	return;
@@ -148,6 +165,7 @@ static void Menu_Find()
 static void Menu_Add()
 {
 	int i = 0;
+	int flag = 1;
 	char ch = '0';
 	Questions tempQuest;
 	tempQuest.name_First = (char*)malloc(sizeof(char) * 150);
@@ -162,13 +180,23 @@ static void Menu_Add()
 	{
 		printf("Enter first name: ");
 		if( scanf("%s", tempQuest.name_First) == 0)
-			exit_Error();
+		{
+			printf("\n\t<IException>\n");
+			inputClose();
+			flag = 0;
+			break;
+		}
 		else
 			inputClose();
 
 		printf("Enter second name: ");
 		if( scanf("%s", tempQuest.name_Second) == 0)
-			exit_Error();
+		{
+			printf("\n\t<IException>\n");
+			inputClose();
+			flag = 0;
+			break;
+		}
 		else
 			inputClose();
 		printf("\nfirst, sec names: %s, %s\nSURE?(y/n): ", tempQuest.name_First, tempQuest.name_Second);
@@ -177,7 +205,12 @@ static void Menu_Add()
 			ch = getchar();
 		}
 		if( ch == 'n' )
-			continue;
+		{
+			printf("\n\t<Record was delited>\n");
+			inputClose();
+			flag = 0;
+			break;
+		}
 		for(i = 0; i < mass_len; i++)
 			if( strcmp(mass[i].name_First, tempQuest.name_First) == 0 && strcmp(mass[i].name_Second, tempQuest.name_Second) == 0)
 			{
@@ -191,57 +224,72 @@ static void Menu_Add()
 		}
 		break;
 	}
-	ch = '0';
-	printf("\nInfo:\n\tfirst name: %s\n\tsecond name: %s\n", tempQuest.name_First, tempQuest.name_Second);
-	
-	printf("Enter the group: ");
-	if(scanf("%s", tempQuest.group) == 0)
-		return;
-	printf("Enter avr mark (0..100): ");
-	if(scanf("%s", tempQuest.avr_mark) == 0 || atoi(tempQuest.avr_mark) < 0 || atoi(tempQuest.avr_mark) >100)
-		return;
-
-	printf("does %s %s have salary(y/n)\n", tempQuest.name_First, tempQuest.name_Second);
-	while( ch != 'y' && ch != 'n' )
-		ch = getchar();
-	if( ch == 'y' )
-		tempQuest.isSalary = 1;
-	printf("\nInfo:\n\tfirst name: %s\n\tsecond name: %s\n\tsalary: %s\n",tempQuest.name_First,tempQuest.name_Second, ch == 'y' ? "yes" : "no");
-	printf("does %s %s have social bonus(y/n)\n", tempQuest.name_First, tempQuest.name_Second);
-	ch = '0';
-	while( ch != 'y' && ch != 'n' )
-		ch = getchar();
-	if( ch == 'y' )
-		tempQuest.socialBonus = 1;
-	printf("So, your new record:\n");
-	printf("\tfirst name: %s\n", tempQuest.name_First);
-	printf("\tlast  name: %s\n", tempQuest.name_Second);
-	printf("\tstud group: %s\n", tempQuest.group);
-	printf("\tis salsry?: %s\n", tempQuest.isSalary == 1 ? "yes" : "no");
-	printf("\tsoci bonus: %s\n", tempQuest.socialBonus == 1 ? "yes" : "no");
-	if( tempQuest.isSalary == 1)
-		printf("\t    salary: %d tBLR\n", Salary_count(tempQuest)); 
-	
-	printf("Do you want to save this record?(y/n) ");
-	ch = '0';
-	while( ch != 'y' && ch != 'n' )
-		ch = getchar();
-	if( ch == 'y' )
-	{
-		mass = (Questions*)realloc(mass, sizeof(Questions) * (++mass_len));
-
-		mass[mass_len - 1].name_First = (char*)malloc(sizeof(char) * 150);
-		strcpy(mass[mass_len - 1].name_First, tempQuest.name_First);
-		mass[mass_len - 1].name_Second = (char*)malloc(sizeof(char) * 150);
-		strcpy(mass[mass_len - 1].name_Second, tempQuest.name_Second);
-		mass[mass_len - 1].group = (char*)malloc(sizeof(char) * 150);
-		strcpy(mass[mass_len - 1].group, tempQuest.group);
-		mass[mass_len - 1].avr_mark = (char*)malloc(sizeof(char) * 150);
-		strcpy(mass[mass_len - 1].avr_mark, tempQuest.avr_mark);
-		mass[mass_len - 1].isSalary = tempQuest.isSalary;
-		mass[mass_len - 1].socialBonus = tempQuest.socialBonus;	
-	
+	if( flag == 1){
+		ch = '0';
+		printf("\nInfo:\n\tfirst name: %s\n\tsecond name: %s\n", tempQuest.name_First, tempQuest.name_Second);
+		printf("Enter the group: ");
+		if(scanf("%s", tempQuest.group) == 0)	
+		{	
+			printf("\n\t<IException>\n");
+			inputClose();
+			flag = 0;
+		}else{
+			printf("Enter avr mark (0..100): ");
+			if(scanf("%s", tempQuest.avr_mark) == 0 || atoi(tempQuest.avr_mark) < 0 || atoi(tempQuest.avr_mark) >100)
+			{	
+				printf("\n\t<IException>\n");
+				inputClose();
+				flag = 0;
+			}
+		}
 	}
+	if( flag == 1){
+		printf("does %s %s have salary(y/n)\n", tempQuest.name_First, tempQuest.name_Second);
+		while( ch != 'y' && ch != 'n' )
+			ch = getchar();
+		if( ch == 'y' )
+			tempQuest.isSalary = 1;
+		printf("\nInfo:\n\tfirst name: %s\n\tsecond name: %s\n\tsalary: %s\n",tempQuest.name_First,tempQuest.name_Second, ch == 'y' ? "yes" : "no");
+		printf("does %s %s have social bonus(y/n)\n", tempQuest.name_First, tempQuest.name_Second);
+		ch = '0';
+		while( ch != 'y' && ch != 'n' )
+			ch = getchar();
+		if( ch == 'y' )
+			tempQuest.socialBonus = 1;
+		printf("So, your new record:\n");
+		printf("\tfirst name: %s\n", tempQuest.name_First);
+		printf("\tlast  name: %s\n", tempQuest.name_Second);
+		printf("\tstud group: %s\n", tempQuest.group);
+		printf("\tis salsry?: %s\n", tempQuest.isSalary == 1 ? "yes" : "no");
+		printf("\tsoci bonus: %s\n", tempQuest.socialBonus == 1 ? "yes" : "no");
+		if( tempQuest.isSalary == 1)
+			printf("\t    salary: %d tBLR\n", Salary_count(tempQuest)); 
+	
+		printf("Do you want to save this record?(y/n) ");
+		ch = '0';
+		while( ch != 'y' && ch != 'n' )
+			ch = getchar();
+		if( ch == 'y' )
+		{
+			mass = (Questions*)realloc(mass, sizeof(Questions) * (++mass_len));
+
+			mass[mass_len - 1].name_First = (char*)malloc(sizeof(char) * 150);
+			strcpy(mass[mass_len - 1].name_First, tempQuest.name_First);
+			mass[mass_len - 1].name_Second = (char*)malloc(sizeof(char) * 150);
+			strcpy(mass[mass_len - 1].name_Second, tempQuest.name_Second);
+			mass[mass_len - 1].group = (char*)malloc(sizeof(char) * 150);
+			strcpy(mass[mass_len - 1].group, tempQuest.group);
+			mass[mass_len - 1].avr_mark = (char*)malloc(sizeof(char) * 150);
+			strcpy(mass[mass_len - 1].avr_mark, tempQuest.avr_mark);
+			mass[mass_len - 1].isSalary = tempQuest.isSalary;
+			mass[mass_len - 1].socialBonus = tempQuest.socialBonus;	
+		
+		}
+	}
+	free(tempQuest.name_First);
+	free(tempQuest.name_Second);
+	free(tempQuest.avr_mark);
+	free(tempQuest.group);
 	inputClose();
 	return;
 }
@@ -262,13 +310,21 @@ static void Menu_Change()
 	{
 		printf("Enter first name: ");
 		if( scanf("%s", tempQuest.name_First) == 0)
-			exit_Error();
+		{
+			printf("\n\t<IException>\n");
+			inputClose();
+			break;
+		}
 		else
 			inputClose();
 
 		printf("Enter second name: ");
 		if( scanf("%s", tempQuest.name_Second) == 0)
-			exit_Error();
+		{
+			printf("\n\t<IException>\n");
+			inputClose();
+			break;
+		}
 		else
 			inputClose();
 		printf("\nfirst, sec names: %s, %s\nSURE?(y/n): ", tempQuest.name_First, tempQuest.name_Second);
@@ -277,7 +333,10 @@ static void Menu_Change()
 			ch = getchar();
 		}
 		if( ch == 'n' )
-			continue;
+		{
+			printf("\n\t<Query deleted>\n");
+			break;
+		}
 		for(i = 0; i < mass_len; i++)
 			if( strcmp(mass[i].name_First, tempQuest.name_First) == 0 && strcmp(mass[i].name_Second, tempQuest.name_Second) == 0)
 			{
@@ -289,16 +348,18 @@ static void Menu_Change()
 			printf("<needed record doesn't exist>\n");
 		break;
 	}
-	inputClose();
-	getchar();
-	return;
+	free(tempQuest.name_First);
+	free(tempQuest.name_Second);
+	free(tempQuest.avr_mark);
+	free(tempQuest.group);
 	return;
 }
 static void RecordChange(int num)
 {
 	char* str = NULL;
+	int loopFlag = 1;
 	char ch = '0';
-	str = (char*)malloc(sizeof(char)* 150);
+	str = (char*)malloc(sizeof(char) * 10);
 	if(str == NULL)
 		exit_Error();
 	printf("\n\nSo, needed record:\n");
@@ -310,30 +371,88 @@ static void RecordChange(int num)
 	if( mass[num].isSalary == 1)
 		printf("\t    salary: %d tBLR\n", Salary_count(mass[num]));
 	inputClose();
-	while(1)
+	while(loopFlag == 1)
 	{
 		printf("\n1) Change avr mark: %s\n", mass[num].avr_mark);
 		printf("2) Change social bonus. %s\n", mass[num].socialBonus ? "has social bonus" : "doesn't have social bonus");
 		printf("3) Salary status. %s\n", mass[num].isSalary ? "has salary" : "doesn't have salary");
 		printf("4) Finish changing.\n");
 		ch = '0';
-		while( ch != '1' && ch != '2' && ch != '3' && ch != '4' && ch != '5')
+		while( ch != '1' && ch != '2' && ch != '3' && ch != '4' && ch != '5' && loopFlag == 1)
 		{
 			ch = '0';
 			switch(ch = getchar())
 			{
 				case '1':
+					inputClose();
 					printf("Enter avr mark (0..100): ");
 					strcpy(str, "");
-					if(scanf("%s", str) == 0 || atoi(str) < 0 || atoi(str) >100)
+					(void)fgets(str, 8, stdin);
+					printf("%d -%s-", strlen(str), str);
+					if(strlen(str) == 2)
+					{	
+						if(str[0] > '9' || str[0] < '0')
+							loopFlag = 0;
+						else
+						{
+							free(mass[num].avr_mark);
+							mass[num].avr_mark = (char*)malloc(sizeof(char) * 150);
+							mass[num].avr_mark[0] = str[0];
+							mass[num].avr_mark[1] = '\0';
+						}
+					}else if(strlen(str) == 3)
 					{
-						printf("\nInput Error..\n");
-						return;
+						if(str[0] > '9' || str[1] > '9' || str[0] < '0' || str[1] < '0')
+							loopFlag = 0;
+						else
+						{
+							free(mass[num].avr_mark);
+							mass[num].avr_mark = (char*)malloc(sizeof(char) * 150);
+							mass[num].avr_mark[0] = str[0];
+							mass[num].avr_mark[1] = str[1];
+							mass[num].avr_mark[2] = '\0';
+						}
+					}else if(strlen(str) == 4)
+					{
+						if(str[0] != '1' && str[1] != '0' && str[2] != '0')
+							loopFlag = 0;
+						else
+						{
+							free(mass[num].avr_mark);
+							mass[num].avr_mark = (char*)malloc(sizeof(char) * 150);
+							mass[num].avr_mark[0] = str[0];
+							mass[num].avr_mark[1] = str[1];
+							mass[num].avr_mark[2] = str[2];
+							mass[num].avr_mark[3] = '\0';
+						}
+					
+					}else
+						loopFlag = 0;
+
+					if(loopFlag == 0)
+					{
+						printf("\n\t<IException>\n");
+						inputClose();
+						continue;
 					}
+					if(atoi(str) < 0 || atoi(str) > 100)
+					{
+						printf("\n\t<IException>\n");
+						loopFlag = 0;
+						inputClose();
+						continue;
+					}
+					strcpy(mass[num].avr_mark, "");
+					free(mass[num].avr_mark);
+					mass[num].avr_mark = (char*)malloc(sizeof(char) * (strlen(str) + 1));
 					strcpy(mass[num].avr_mark, str);
+					printf("-%s-", mass[num].avr_mark);
+					mass[num].avr_mark[strlen(mass[num].avr_mark)-1] = '\0';
 					strcpy(str, "");
+					printf("\n\t<Salary changed>\n");
+					loopFlag = 0;
 					inputClose();
-					getchar();
+					continue;
 					break;
 				case '2':
 					if(mass[num].socialBonus == 1)
@@ -348,14 +467,15 @@ static void RecordChange(int num)
 						mass[num].isSalary = 1;
 					break;
 				case '4':
-					return;
+					loopFlag = 0;
 					break;
 				default:
 					break;
 			}
-			
 		}
 	}
+	free(str);
+	return;
 }
 static void Menu_Erase()
 {
@@ -374,13 +494,21 @@ static void Menu_Erase()
 	{
 		printf("Enter first name: ");
 		if( scanf("%s", tempQuest.name_First) == 0)
-			exit_Error();
+		{
+			printf("\n\t<IException>\n");
+			inputClose();
+			break;
+		}
 		else
 			inputClose();
 
 		printf("Enter second name: ");
 		if( scanf("%s", tempQuest.name_Second) == 0)
-			exit_Error();
+		{
+			printf("\n\t<IException>\n");
+			inputClose();
+			break;
+		}
 		else
 			inputClose();
 		printf("\nfirst, sec names: %s, %s\nSURE?(y/n): ", tempQuest.name_First, tempQuest.name_Second);
@@ -389,7 +517,9 @@ static void Menu_Erase()
 			ch = getchar();
 		}
 		if( ch == 'n' )
-			continue;
+		{
+			break;
+		}	
 		for(i = 0; i < mass_len; i++)
 			if( strcmp(mass[i].name_First, tempQuest.name_First) == 0 && strcmp(mass[i].name_Second, tempQuest.name_Second) == 0)
 			{
@@ -397,6 +527,10 @@ static void Menu_Erase()
 					mass_len--;
 				else
 					mass[i] = mass[mass_len -1];
+					free(mass[mass_len - 1].name_First);
+					free(mass[mass_len - 1].name_Second);
+					free(mass[mass_len - 1].avr_mark);
+					free(mass[mass_len - 1].group);
 					mass_len--;
 				ch = 'q';
 				break;
@@ -405,8 +539,12 @@ static void Menu_Erase()
 			printf("<nothing found>\n");
 		break;
 	}
+	free(tempQuest.name_First);
+	free(tempQuest.name_Second);
+	free(tempQuest.avr_mark);
+	free(tempQuest.group);
 	inputClose();
-	getchar();
+
 	return;
 }
 
@@ -518,6 +656,14 @@ static void Menu_Exit()
 		fputs("-\n", file);
 		fputc('\n', file);	
 	}
+	for(i = 0; i < mass_len; i++)
+	{
+		free(mass[i].name_First);
+		free(mass[i].name_Second);
+		free(mass[i].group);
+		free(mass[i].avr_mark);
+	}
+	free(mass);
 	printf("\n");
 	fclose(file);
 	free(str);
@@ -558,9 +704,14 @@ static Questions* readQuestions()
 	mass = (Questions*)malloc(sizeof(Questions)* QuestionCount());
 	file = fopen(QUESTION_FILE_NAME, "r");
 	str = (char*) malloc(sizeof(char)*150);
-	
+
 	if( str == NULL || file == NULL || mass == NULL)
+	{
+		fclose(file);
 		exit_Error();
+		free(str);
+	
+	}
 	strcpy(str,"");
 	while( fgets(str, 100, file) )
 	{
@@ -568,22 +719,22 @@ static Questions* readQuestions()
 		{
 			fgets(str, 100, file);
 			str[strlen(str)-1] = '\0';
-			tempQuestion.name_First = (char*)malloc(sizeof(char)* strlen(str));
+			tempQuestion.name_First = (char*)malloc(sizeof(char)* (strlen(str)+1));
 			strcpy( tempQuestion.name_First, str);
 			strcpy(str,"");
 			fgets(str, 100, file);
 			str[strlen(str)-1] = '\0';
-			tempQuestion.name_Second = (char*)malloc(sizeof(char)* strlen(str));
+			tempQuestion.name_Second = (char*)malloc(sizeof(char)* (strlen(str) + 1));
 			strcpy( tempQuestion.name_Second, str);
 			strcpy( str, "");
 			fgets(str, 100, file);
 			str[strlen(str)-1] = '\0';
-			tempQuestion.group = (char*)malloc(sizeof(char)* strlen(str));
+			tempQuestion.group = (char*)malloc(sizeof(char)* (strlen(str) + 1));
 			strcpy( tempQuestion.group, str);
 			strcpy( str, "");
 			fgets(str, 100, file);
 			str[strlen(str)-1] = '\0';
-			tempQuestion.avr_mark = (char*)malloc(sizeof(char)* strlen(str));
+			tempQuestion.avr_mark = (char*)malloc(sizeof(char)* (strlen(str) + 1));
 			strcpy( tempQuestion.avr_mark, str);
 			strcpy( str, "");
 			fgets(str, 100, file);
@@ -612,6 +763,7 @@ static Questions* readQuestions()
 			tempQuestion.socialBonus = 0;
 		}
 	}
+	free(str);
 	fclose(file);
 	return mass;
 }
@@ -639,6 +791,15 @@ static void inputClose()
 }
 static void exit_Error()
 {
+	int i;
 	printf("\nInput Error..\n");
+	for(i = 0; i < mass_len; i++)
+	{
+		free(mass[i].name_First);
+		free(mass[i].name_Second);
+		free(mass[i].group);
+		free(mass[i].avr_mark);
+	}
+	free(mass);
 	exit(1);
 }

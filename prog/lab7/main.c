@@ -313,6 +313,7 @@ static myQueue readQuestions()
 			tempQuestion.ans = NULL;	
 		}
 	}
+	free(str);
 	fclose(file);
 	return queue;
 }
